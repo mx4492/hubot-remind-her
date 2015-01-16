@@ -6,7 +6,7 @@ yet another remind.coffee of hubot scripts
 
 ```
 Hubot> @hubot remind me at tomorrow 7:00 to wakeup!
-I'll remind you to wakeup! at Sat Jan 16 2015 07:00:00 GMT+0900 (JST)
+I'll remind you to wakeup! at Sat Jan 17 2015 07:00:00 GMT+0900 (JST)
 ```
 
 ```
