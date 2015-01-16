@@ -28,10 +28,10 @@ class Reminders
 
     @robot.logger.debug("add id:#{id}")
 
-    setTimeout (robot) =>
-      robot.reply reminder.envelope, "you asked me to remind yout to #{reminder.action}"
+    setTimeout =>
+      @robot.reply reminder.envelope, "you asked me to remind yout to #{reminder.action}"
       @remove(id)
-    , reminder.diff(), @robot
+    , reminder.diff()
 
     @robot.brain.data.reminder_at[id] = reminder
 
