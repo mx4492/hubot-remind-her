@@ -18,6 +18,10 @@ Hubot> Shell: you asked me to remind yout to wakeup!
 hubot-remind-at use [chrono](http://wanasit.github.io/pages/chrono/) is a natural language date parser in javascript.
 So you can check format whichi hubot-remind-at parse on this site.
 
+## License
+
+* MIT
+
 ## See Also
 
 * [remind.coffee](https://github.com/github/hubot-scripts/blob/master/src/scripts/remind.coffee)
