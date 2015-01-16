@@ -65,7 +65,7 @@ module.exports = (robot) ->
     @robot.logger.debug results[0].start.date()
 
     if reminder.diff() <= 0
-      msg.send "#{time} is past. can't remnd you"
+      msg.send "#{time} is past. can't remind you"
       return
 
     reminders.queue reminder
