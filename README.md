@@ -1,4 +1,4 @@
-# hubot-remindat
+# hubot-remind-at
 
 yet another remind.coffee of hubot scripts
 
@@ -15,8 +15,8 @@ Hubot> Shell: you asked me to remind yout to wakeup!
 
 ## Time Format
 
-hubot-remindat use [chrono](http://wanasit.github.io/pages/chrono/) is a natural language date parser in javascript.
-So you can check format whichi hubot-remindat parse on this site.
+hubot-remind-at use [chrono](http://wanasit.github.io/pages/chrono/) is a natural language date parser in javascript.
+So you can check format whichi hubot-remind-at parse on this site.
 
 ## See Also
 
