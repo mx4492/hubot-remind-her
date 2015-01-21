@@ -1,6 +1,6 @@
 {
   "name": "hubot-remind-at",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "yet another remind.coffee of hubot scripts",
   "main": "index.coffee",
   "scripts": {
