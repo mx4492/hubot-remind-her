@@ -18,6 +18,19 @@ Hubot> Shell: you asked me to remind you to wakeup!
 hubot-remind-at use [chrono](http://wanasit.github.io/pages/chrono/) is a natural language date parser in javascript.
 So you can check format whichi hubot-remind-at parse on this site.
 
+## Tests
+
+hubot-remind-at comes with a test suite. To install the necessary
+development dependencies required to run the tests, do:
+
+    npm install
+
+from the root directory. Subsequently, you can run the tests using
+either of the following commands:
+
+    rake test # OR
+    npm test
+
 ## License
 
 * MIT
