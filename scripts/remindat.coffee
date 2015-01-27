@@ -2,9 +2,6 @@
 #   remind by natural language date for hubot
 # Commands
 #   hubot remind me at <time> to <action> - Set a reminder at <time> to do an <action> <time> is natural language date which chrono-node can parse
-#
-# Original
-#   remind.coffee (https://github.com/github/hubot-scripts/blob/master/src/scripts/remind.coffee) (whitman,MIT)
 
 chrono = require('chrono-node')
 uuid   = require('node-uuid')
