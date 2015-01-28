@@ -26,9 +26,8 @@ development dependencies required to run the tests, do:
     npm install
 
 from the root directory. Subsequently, you can run the tests using
-either of the following commands:
+of the following command:
 
-    rake test # OR
     npm test
 
 ## License

@@ -4,7 +4,7 @@
   "description": "yet another remind.coffee of hubot scripts",
   "main": "index.coffee",
   "scripts": {
-    "test": "rake test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
