@@ -1,19 +1,20 @@
 {
-  "name": "hubot-remind-at",
-  "version": "0.0.3",
-  "description": "yet another remind.coffee of hubot scripts",
+  "name": "hubot-remind-her",
+  "version": "0.0.1",
+  "description": "Friendly reminder script for Hubot",
   "main": "index.coffee",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/soh335/hubot-remind-at.git"
+    "url": "https://github.com/mx4492/hubot-remind-her.git"
   },
   "keywords": [
-    "hubot"
+    "hubot",
+    "reminder"
   ],
-  "author": "soh335",
+  "author": "mx4492",
   "license": "MIT",
   "dependencies": {
     "chrono-node": "^1.0.2",
@@ -25,5 +26,5 @@
     "mocha": "*",
     "hubot-test-helper": "*"
   },
-  "homepage": "https://github.com/soh335/hubot-remind-at"
+  "homepage": "https://github.com/mx4492/hubot-remind-her"
 }
