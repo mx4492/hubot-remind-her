@@ -1,4 +1,3 @@
-chai = require 'chai'
 assert = require 'assert'
 
 process.env.TZ = 'UTC'
