@@ -4,8 +4,13 @@ Hubot script to create reminders in a relaxed friendly syntax.
 
 ## Installation
 
-For now, copy `scripts/hubot-remind-her.coffee` to your scripts
-folder.
+Install the npm package
+
+    npm install hubot-remind-her --save
+
+and add *hubot-remind-her* to `external-scripts.json`
+
+    [ "hubot-remind-her" ]
 
 ## Usage
 
