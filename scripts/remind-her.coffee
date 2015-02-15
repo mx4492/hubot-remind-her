@@ -1,7 +1,14 @@
-# Description
-#   remind by natural language date for hubot
-# Commands
-#   hubot remind me at <time> to <action> - Set a reminder at <time> to do an <action> <time> is natural language date which chrono-node can parse
+# Description:
+#   Friendly reminders for hubot
+#
+# Commands:
+#   hubot remind me tomorrow to document this better
+#   hubot remind us in 15 minutes to end this meeting
+#   hubot remind at 5 PM to go home
+#
+# Notes:
+#   For help with the time string syntax, see
+#   http://wanasit.github.io/pages/chrono/
 
 parse = require './parse'
 uuid   = require('node-uuid')
