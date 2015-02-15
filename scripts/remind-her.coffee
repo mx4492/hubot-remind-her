@@ -3,7 +3,7 @@
 # Commands
 #   hubot remind me at <time> to <action> - Set a reminder at <time> to do an <action> <time> is natural language date which chrono-node can parse
 
-chrono = require('chrono-node')
+parse = require './parse'
 uuid   = require('node-uuid')
 
 class Reminders
@@ -48,21 +48,21 @@ module.exports = (robot) ->
   reminders = new Reminders robot
 
   robot.respond /remind me at (.+) to (.*)/i, (msg) ->
-    time = msg.match[1]
+    text = msg.match[0]
     action = msg.match[2]
 
-    results = chrono.parse(time)
+    date = parse text
 
-    if results.length < 1
-      msg.send "can't parse #{time}"
+    if date == false
+      msg.send "can't parse #{text}"
       return
 
-    reminder = new ReminderAt msg.envelope, results[0].start.date(), action
+    reminder = new ReminderAt msg.envelope, date, action
 
-    @robot.logger.debug results[0].start.date()
+    @robot.logger.debug date
 
     if reminder.diff() <= 0
-      msg.send "#{time} is past. can't remind you"
+      msg.send "#{date} is past. can't remind you"
       return
 
     reminders.queue reminder
