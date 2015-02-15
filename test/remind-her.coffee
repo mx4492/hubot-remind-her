@@ -13,6 +13,10 @@ describe 'Reminder Strings', ->
       [..., last] = @messages
       last[1]
 
+  it 'that do not specify a date are ignored', ->
+    room.user.say 'user', 'hubot remind me at not a date to do task'
+    assert.match room.lastMessage(), /can't parse/
+
   it 'can be absolute chrono formats specified with "at"', ->
     room.user.say 'user', 'hubot remind me at Saturday, 17 August 2513 to do task'
     assert.equal "I'll remind you to do task at Thu Aug 17 2513 12:00:00 GMT+0000 (UTC)", room.lastMessage()
