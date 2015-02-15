@@ -72,7 +72,7 @@ module.exports = (robot) ->
     date = parse text
 
     if date == false
-      msg.send "can't parse #{text}"
+      msg.send "I did not understand the date in '#{text}'"
       return
 
     reminder = new ReminderAt msg.envelope, date, action

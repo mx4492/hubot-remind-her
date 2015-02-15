@@ -15,7 +15,7 @@ describe 'Reminder Strings', ->
 
   it 'that do not specify a date are ignored', ->
     room.user.say 'user', 'hubot remind me at not a date to do task'
-    assert.match room.lastMessage(), /can't parse/
+    assert.match room.lastMessage(), /I did not understand the date/
 
   it 'can be absolute chrono formats specified with "at"', ->
     room.user.say 'user', 'hubot remind me at Saturday, 17 August 2513 to do task'
