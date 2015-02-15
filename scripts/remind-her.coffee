@@ -54,7 +54,7 @@ class ReminderAt
 module.exports = (robot) ->
   reminders = new Reminders robot
 
-  robot.respond /remind me at (.+) to (.*)/i, (msg) ->
+  robot.respond /remind (.+) to (.*)/i, (msg) ->
     text = msg.match[0]
     action = msg.match[2]
 

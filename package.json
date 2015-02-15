@@ -24,6 +24,7 @@
     "coffee-script": "^1.8.0",
     "hubot": "*",
     "mocha": "*",
+    "chai": "*",
     "hubot-test-helper": "*"
   },
   "homepage": "https://github.com/mx4492/hubot-remind-her"
