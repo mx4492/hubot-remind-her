@@ -12,6 +12,7 @@
 
 chrono = require 'chrono-node'
 uuid = require 'node-uuid'
+moment = require 'moment'
 
 # Method that builds on top of the chrono date parser and tries to
 # extract a date and an action from a given string.
@@ -85,4 +86,5 @@ module.exports = (robot) ->
 
     reminders.queue reminder
 
-    msg.send "I'll remind you to #{action} at #{reminder.date.toLocaleString()}"
+    outputDate = moment(date).calendar()
+    msg.send "I'll remind you to #{action} at #{outputDate}"
