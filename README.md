@@ -12,6 +12,9 @@ and add *hubot-remind-her* to `external-scripts.json`
 
     [ "hubot-remind-her" ]
 
+Note: This script will not work in conjuction with [remind.coffee][] and
+[hubot-remind-at][], so disable them if you are enabling this.
+
 ## Usage
 
 If it is prefixed with `remind`, and ends with `to <something>`, and
