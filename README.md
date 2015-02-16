@@ -2,6 +2,15 @@
 
 Hubot script to create reminders in a relaxed friendly syntax.
 
+## Features
+
+* Supports both relative ("in 5 minutes") and absolute ("tomorrow 5
+  pm") time specification.
+* The syntax of the bot command is relaxed. It simply DWYM (Does what
+  you mean) without expecting much grammar.
+* The confirmation given by the script uses a relative date instead of
+  a scary complete ISOish date string.
+
 ## Installation
 
 Install the npm package
@@ -40,11 +49,12 @@ Subsequently, you can run the tests using:
 
     npm test
 
-## History
+## History/Credits
 
 This is a spiritual successor of the [remind.coffee][] and the
 [hubot-remind-at][] scripts, combining their functionality, making the
 command syntax more flexible, and the bot's responses more friendly.
+All thanks to the awesomeness of [chrono][] and [moment.js][].
 
 ## Bugs
 
@@ -56,3 +66,4 @@ command syntax more flexible, and the bot's responses more friendly.
 [hubot-remind-at]: https://github.com/soh335/hubot-remind-at.git
 [chrono]: http://wanasit.github.io/pages/chrono/
 [long-settimeout]: http://stackoverflow.com/questions/12351521/can-settimeout-be-too-long
+[moment.js]: http://momentjs.com/
