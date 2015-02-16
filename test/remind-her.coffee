@@ -27,11 +27,11 @@ describe 'Reminder Strings', ->
 
   it 'can be relative chrono formats specified with "in"', ->
     room.user.say 'user', 'hubot remind me in 15 minutes to foo'
-    assert.match room.lastMessage(), /I'll remind you to foo at/
+    assert.match room.lastMessage(), /I'll remind you to foo/
 
   it 'subject is optional', ->
     room.user.say 'user', 'hubot remind 5 PM to foo'
-    assert.match room.lastMessage(), /I'll remind you to foo at/
+    assert.match room.lastMessage(), /I'll remind you to foo/
 
 describe 'Output Format', ->
   it 'uses moment.js outputs', ->
@@ -44,4 +44,4 @@ describe 'Input/Output Functional test', ->
   it 'relative dates work in both input and output', ->
     room = createRoom()
     room.user.say 'user', 'hubot remind me at tomorrow 5 PM to do task'
-    assert.match room.lastMessage(), /I'll remind you to do task at Tomorrow at 5:00 PM/
+    assert.match room.lastMessage(), /I'll remind you to do task Tomorrow at 5:00 PM/

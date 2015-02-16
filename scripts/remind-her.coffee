@@ -46,7 +46,7 @@ class Reminders
 
     @robot.logger.info(reminder.diff())
     setTimeout =>
-      @robot.reply reminder.envelope, "you asked me to remind you to #{reminder.action}"
+      @robot.reply reminder.envelope, "You asked me to remind you to #{reminder.action}"
       @remove(id)
     , reminder.diff()
 
@@ -88,4 +88,4 @@ module.exports = (robot) ->
     reminders.queue reminder
 
     outputDate = moment(date).calendar()
-    msg.send "I'll remind you to #{action} at #{outputDate}"
+    msg.send "I'll remind you to #{action} #{outputDate}"
