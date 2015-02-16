@@ -42,13 +42,13 @@ class Reminders
     if ! id?
       id = uuid.v4() while ! id? or @robot.brain.data.reminder_at[id]
 
-    @robot.logger.debug("add id:#{id}")
+    after = reminder.diff()
+    @robot.logger.debug("add id: #{id} after: #{after}")
 
-    @robot.logger.info(reminder.diff())
     setTimeout =>
       @robot.reply reminder.envelope, "You asked me to remind you to #{reminder.action}"
       @remove(id)
-    , reminder.diff()
+    , after
 
     @robot.brain.data.reminder_at[id] = reminder
 
