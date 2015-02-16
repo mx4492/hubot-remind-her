@@ -24,6 +24,9 @@ and add *hubot-remind-her* to `external-scripts.json`
 Note: This script will not work in conjuction with [remind.coffee][] and
 [hubot-remind-at][], so disable them if you are enabling this.
 
+Remember to set your timezone correctly. For example, on heroku you need to run
+`heroku config:set TZ="foo"`
+
 ## Usage
 
 If it is prefixed with `remind`, and ends with `to <something>`, and
