@@ -33,6 +33,10 @@ describe 'Reminder Strings', ->
     room.user.say 'user', 'hubot remind 5 PM to foo'
     assert.match room.lastMessage(), /I'll remind you to foo/
 
+  it 'for can be used in place of to', ->
+    room.user.say 'user', 'hubot remind me on 5 PM for stuff'
+    assert.match room.lastMessage(), /I'll remind you for stuff/
+
 describe 'Output Format', ->
   it 'uses moment.js outputs', ->
     room = createRoom()
