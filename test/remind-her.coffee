@@ -5,8 +5,13 @@ process.env.TZ = 'UTC'
 Helper = require 'hubot-test-helper'
 helper = new Helper('../scripts')
 
+lastRoom = null
+
 createRoom = () ->
+  if lastRoom
+    lastRoom.robot.shutdown()
   room = helper.createRoom()
+  lastRoom = room
   room.lastMessage = ->
     [..., last] = @messages
     last[1]
