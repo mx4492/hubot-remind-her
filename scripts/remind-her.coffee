@@ -5,9 +5,10 @@
 #   hubot remind me tomorrow to document this better
 #   hubot remind us in 15 minutes to end this meeting
 #   hubot remind at 5 PM to go home
-#   hubot list remind[ers]
-#   hubot show remind[ers]
-#   hubot remind[ers] (list|show)
+#   hubot (list|show|all) remind[ers]
+#   hubot remind[ers] (list|show|all)
+#   hubot [delete|remove|stop] remind[ers]
+#   hubot remind[ers] (delete|remove|stop)
 #
 # Notes:
 #   For help with the time string syntax, see
@@ -60,8 +61,9 @@ class Reminders
     @robot.brain.data.reminder_at[id] = reminder
 
   fire: (id, reminder) ->
-    @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
-    @remove(id)
+    unless reminder.is_deleted
+      @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
+      @remove(id)
 
   remove: (id) ->
     @robot.logger.debug("remove id:#{id}")
@@ -70,12 +72,27 @@ class Reminders
   list: (msg) ->
     k = envelope_key msg.envelope
     @robot.logger.debug("listing reminders for #{k}")
-    p = @pending[k]
-    unless p
+    p = @pending[k] || []
+    if p.length == 0
       "No reminders"
     else
       lines = ("#{i+1}. #{r.action} at #{r.prettyDate()}" for r, i in p)
       lines.join('\n')
+
+
+  delete: (msg, idx) ->
+    help = 'Use the "list reminders" command to see a list of existing reminders'
+    k = envelope_key msg.envelope
+    @robot.logger.debug("deleting reminder #{idx} for #{k}")
+    p = @pending[k]
+    unless p
+      return "No reminders. #{help}"
+    i = parseInt(idx) - 1
+    unless i < p.length
+      return "No such reminder to remove. #{help}"
+    reminder = p.splice(i, 1)[0]
+    reminder.is_deleted = true
+    return "Removed reminder ##{i + 1}"
 
 class ReminderAt
 
@@ -115,8 +132,19 @@ module.exports = (robot) ->
 
     msg.send "I'll remind you #{action} #{reminder.prettyDate()}"
 
-  robot.respond /(list|show) remind(ers)?/i, (msg) ->
+  robot.respond /(list|show|all) remind(ers)?/i, (msg) ->
     msg.send reminders.list(msg)
 
-  robot.respond /remind(ers)? (list|show)/i, (msg) ->
+  robot.respond /remind(ers)?\s+(list|show|all)/i, (msg) ->
     msg.send reminders.list(msg)
+
+  robot.respond /(list|show|all)\s+remind(ers)?/i, (msg) ->
+    msg.send reminders.list(msg)
+
+  robot.respond /remind(ers)?\s+(delete|remove|stop)\s+(\d+)/i, (msg) ->
+    idx = msg.match[3]
+    msg.send reminders.delete(msg, idx)
+
+  robot.respond /(delete|remove|stop)\s+remind(ers)?\s+(\d+)/i, (msg) ->
+    idx = msg.match[3]
+    msg.send reminders.delete(msg, idx)

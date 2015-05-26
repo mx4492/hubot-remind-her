@@ -69,6 +69,8 @@ describe 'Listing reminders', ->
     assert.equal room.lastMessage(), 'No reminders'
     room.user.say 'user', 'hubot reminders list'
     assert.equal room.lastMessage(), 'No reminders'
+    room.user.say 'user', 'hubot reminders all'
+    assert.equal room.lastMessage(), 'No reminders'
 
   it "when reminder exists, they're sorted by time", ->
     room = createRoom()
@@ -88,3 +90,36 @@ describe 'Listing reminders', ->
     assert.match room1.lastMessage(), /task1/
     room2.user.say 'user', 'hubot list reminders'
     assert.match room2.lastMessage(), /task2/
+
+describe 'Deleting reminders', ->
+  it 'when no reminders', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot delete remind 1'
+    assert.match room.lastMessage(), /No reminders/
+
+  it 'alternate syntax', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remove remind 1'
+    assert.match room.lastMessage(), /No reminders/
+    room.user.say 'user', 'hubot stop reminders 1'
+    assert.match room.lastMessage(), /No reminders/
+    room.user.say 'user', 'hubot reminders delete 1'
+    assert.match room.lastMessage(), /No reminders/
+    room.user.say 'user', 'hubot reminders remove 1'
+    assert.match room.lastMessage(), /No reminders/
+    room.user.say 'user', 'hubot reminders stop 1'
+    assert.match room.lastMessage(), /No reminders/
+
+  it 'out of bounds index', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me at 4 PM to do task'
+    room.user.say 'user', 'hubot delete remind 2'
+    assert.match room.lastMessage(), /No such reminder/
+
+  it 'deleted reminders are not listed', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me at 4 PM to do task'
+    room.user.say 'user', 'hubot delete remind 1'
+    assert.match room.lastMessage(), /Removed reminder #1/
+    room.user.say 'user', 'hubot list reminders'
+    assert.equal room.lastMessage(), 'No reminders'
