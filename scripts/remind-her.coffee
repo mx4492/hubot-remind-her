@@ -5,6 +5,9 @@
 #   hubot remind me tomorrow to document this better
 #   hubot remind us in 15 minutes to end this meeting
 #   hubot remind at 5 PM to go home
+#   hubot list remind[ers]
+#   hubot show remind[ers]
+#   hubot remind[ers] (list|show)
 #
 # Notes:
 #   For help with the time string syntax, see
@@ -25,8 +28,11 @@ parse = (s) ->
     return false
   res[0].start.date()
 
+envelope_key = (e) -> e.room || e.user.id
+
 class Reminders
   constructor: (@robot) ->
+    @pending = {}
     @robot.brain.data.reminder_at ?= {}
     @robot.brain.on 'loaded', =>
         reminder_at = @robot.brain.data.reminder_at
@@ -38,7 +44,6 @@ class Reminders
             @remove(id)
 
   queue: (reminder, id) ->
-
     if ! id?
       id = uuid.v4() while ! id? or @robot.brain.data.reminder_at[id]
 
@@ -46,23 +51,44 @@ class Reminders
     @robot.logger.debug("add id: #{id} after: #{after}")
 
     setTimeout =>
-      @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
-      @remove(id)
+      @fire(id, reminder)
     , after
 
+    k = reminder.key()
+    (@pending[k] ?= []).push reminder
+    (@pending[k]).sort (r1, r2) -> r1.diff() - r2.diff()
     @robot.brain.data.reminder_at[id] = reminder
+
+  fire: (id, reminder) ->
+    @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
+    @remove(id)
 
   remove: (id) ->
     @robot.logger.debug("remove id:#{id}")
     delete @robot.brain.data.reminder_at[id]
 
+  list: (msg) ->
+    k = envelope_key msg.envelope
+    @robot.logger.debug("listing reminders for #{k}")
+    p = @pending[k]
+    unless p
+      "No reminders"
+    else
+      lines = ("#{i+1}. #{r.action} at #{r.prettyDate()}" for r, i in p)
+      lines.join('\n')
+
 class ReminderAt
 
   constructor: (@envelope, @date, @action) ->
 
+  key: -> envelope_key @envelope
+
   diff: ->
     now = new Date().getTime()
     (@date.getTime()) - now
+
+  prettyDate: ->
+    moment(@date).calendar()
 
 module.exports = (robot) ->
   reminders = new Reminders robot
@@ -87,5 +113,10 @@ module.exports = (robot) ->
 
     reminders.queue reminder
 
-    outputDate = moment(date).calendar()
-    msg.send "I'll remind you #{action} #{outputDate}"
+    msg.send "I'll remind you #{action} #{reminder.prettyDate()}"
+
+  robot.respond /(list|show) remind(ers)?/i, (msg) ->
+    msg.send reminders.list(msg)
+
+  robot.respond /remind(ers)? (list|show)/i, (msg) ->
+    msg.send reminders.list(msg)

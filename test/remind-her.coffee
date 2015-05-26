@@ -49,3 +49,37 @@ describe 'Input/Output Functional test', ->
     room = createRoom()
     room.user.say 'user', 'hubot remind me at tomorrow 5 PM to do task'
     assert.match room.lastMessage(), /I'll remind you to do task Tomorrow at 5:00 PM/
+
+describe 'Listing reminders', ->
+  it 'when no reminders', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot list reminders'
+    assert.equal room.lastMessage(), 'No reminders'
+
+  it 'alternate syntax', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot list remind'
+    assert.equal room.lastMessage(), 'No reminders'
+    room.user.say 'user', 'hubot show reminders'
+    assert.equal room.lastMessage(), 'No reminders'
+    room.user.say 'user', 'hubot reminders list'
+    assert.equal room.lastMessage(), 'No reminders'
+
+  it "when reminder exists, they're sorted by time", ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me at 5 PM to do task2'
+    room.user.say 'user', 'hubot remind me at 4 PM to do task1'
+    room.user.say 'user', 'hubot list reminders'
+    items = ['1. to do task1 at Today at 4:00 PM',
+             '2. to do task2 at Today at 5:00 PM']
+    assert.equal room.lastMessage(), items.join '\n'
+
+  it "reminders for each user and room are separate", ->
+    room1 = createRoom()
+    room1.user.say 'user', 'hubot remind me at 4 PM to do task1'
+    room2 = createRoom()
+    room2.user.say 'user', 'hubot remind me at 4 PM to do task2'
+    room1.user.say 'user', 'hubot list reminders'
+    assert.match room1.lastMessage(), /task1/
+    room2.user.say 'user', 'hubot list reminders'
+    assert.match room2.lastMessage(), /task2/
