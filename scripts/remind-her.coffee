@@ -44,7 +44,7 @@ class Reminders
     @robot.logger.debug("add id: #{id} after: #{after}")
 
     setTimeout =>
-      @fire(id, reminder)
+      @fire(reminder, id)
     , after
 
     k = reminder.key()
@@ -52,10 +52,13 @@ class Reminders
     (@pending[k]).sort (r1, r2) -> r1.diff() - r2.diff()
     @robot.brain.data.reminder_at[id] = reminder
 
-  fire: (id, reminder) ->
+  fire: (reminder, id) ->
     unless reminder.is_deleted
       @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
-      @remove(id)
+      if reminder.repeat
+        @queue(reminder, id)
+      else
+        @remove(id)
 
   remove: (id) ->
     @robot.logger.debug("remove id:#{id}")
