@@ -55,6 +55,18 @@ describe 'Input/Output Functional test', ->
     room.user.say 'user', 'hubot remind me at tomorrow 5 PM to do task'
     assert.match room.lastMessage(), /I'll remind you to do task Tomorrow at 5:00 PM/
 
+describe 'Date parsing', ->
+  parse = (s) ->
+    room = createRoom()
+    room.user.say 'user', "hubot remind me at #{s} to do task"
+    room.lastMessage()
+
+  it 'time tomorrow', ->
+    assert.match parse('tomorrow 5 PM'), /Tomorrow at 5:00 PM/
+
+  it 'time that has passed today', ->
+    assert.match parse('00:1 AM'), /Tomorrow at 12:01 AM/
+
 describe 'Listing reminders', ->
   it 'when no reminders', ->
     room = createRoom()

@@ -17,7 +17,7 @@
   "author": "Manav Rathi",
   "license": "MIT",
   "dependencies": {
-    "chrono-node": "^1.0.2",
+    "chrono-node": "^1.0.6",
     "node-uuid": "^1.4.2",
     "moment": "^2.9.0"
   },
