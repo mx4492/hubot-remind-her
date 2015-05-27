@@ -123,3 +123,39 @@ describe 'Deleting reminders', ->
     assert.match room.lastMessage(), /Removed reminder #1/
     room.user.say 'user', 'hubot list reminders'
     assert.equal room.lastMessage(), 'No reminders'
+
+describe 'Repeating reminders', ->
+  it 'when no reminders', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot repeat remind 1'
+    assert.match room.lastMessage(), /No reminders/
+
+  it 'alternate syntax', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot reminder repeat 1'
+    assert.match room.lastMessage(), /No reminders/
+    room.user.say 'user', 'hubot reminders repeat 1'
+    assert.match room.lastMessage(), /No reminders/
+
+  it 'out of bounds index', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me at 4 PM to do task'
+    room.user.say 'user', 'hubot repeat reminder 2'
+    assert.match room.lastMessage(), /No such reminder/
+
+  it 'repeated reminders are listed differently', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me at 4 PM to do task'
+    room.user.say 'user', 'hubot repeat reminder 1'
+    assert.match room.lastMessage(), /Will repeat reminder #1/
+    room.user.say 'user', 'hubot list reminders'
+    assert.match room.lastMessage(), /task .* \(repeated\)$/
+
+  it 'repeated reminders using inline specification', ->
+    room = createRoom()
+    room.user.say 'user', 'hubot remind me every 4 PM to do task'
+    assert.match room.lastMessage(), /remind you every/
+    room.user.say 'user', 'hubot remind every 4 PM to task'
+    assert.match room.lastMessage(), /remind you every/
+    room.user.say 'user', 'hubot remind 4 PM to do every task'
+    assert.notMatch room.lastMessage(), /remind you every/

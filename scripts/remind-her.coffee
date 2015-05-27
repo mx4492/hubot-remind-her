@@ -7,8 +7,11 @@
 #   hubot remind at 5 PM to go home
 #   hubot (list|show|all) remind[ers]
 #   hubot remind[ers] (list|show|all)
-#   hubot [delete|remove|stop] remind[ers]
-#   hubot remind[ers] (delete|remove|stop)
+#   hubot [delete|remove|stop] remind[er] [NUMBER]
+#   hubot remind[er] (delete|remove|stop) [NUMBER]
+#   hubot remind every 30 minutes to take a walk
+#   hubot remind[er] repeat [NUMBER]
+#   hubot repeat remind[er] [NUMBER]
 #
 # Notes:
 #   For help with the time string syntax, see
@@ -17,17 +20,6 @@
 chrono = require 'chrono-node'
 uuid = require 'node-uuid'
 moment = require 'moment'
-
-# Method that builds on top of the chrono date parser and tries to
-# extract a date and an action from a given string.
-#
-# Return a Date on success, and false on failure.
-
-parse = (s) ->
-  res = chrono.parse s
-  if res.length == 0
-    return false
-  res[0].start.date()
 
 envelope_key = (e) -> e.room || e.user.id
 
@@ -76,27 +68,40 @@ class Reminders
     if p.length == 0
       "No reminders"
     else
-      lines = ("#{i+1}. #{r.action} at #{r.prettyDate()}" for r, i in p)
+      lines = ("#{i+1}. #{r.listing()}" for r, i in p)
       lines.join('\n')
 
+  idx_help: (text) ->
+    "#{text}. Use the 'list reminders' command to see a list of existing reminders"
 
   delete: (msg, idx) ->
-    help = 'Use the "list reminders" command to see a list of existing reminders'
     k = envelope_key msg.envelope
     @robot.logger.debug("deleting reminder #{idx} for #{k}")
     p = @pending[k]
     unless p
-      return "No reminders. #{help}"
+      return @idx_help "No reminders."
     i = parseInt(idx) - 1
     unless i < p.length
-      return "No such reminder to remove. #{help}"
+      return @idx_help "No such reminder to remove."
     reminder = p.splice(i, 1)[0]
     reminder.is_deleted = true
     return "Removed reminder ##{i + 1}"
 
+  repeat: (msg, idx) ->
+    k = envelope_key msg.envelope
+    @robot.logger.debug("repeating reminder #{idx} for #{k}")
+    p = @pending[k]
+    unless p
+      return @idx_help "No reminders"
+    i = parseInt(idx) - 1
+    unless i < p.length
+      return @idx_help "No such reminder to repeat"
+    p[i].recurrent = true
+    return "Will repeat reminder ##{i + 1}"
+
 class ReminderAt
 
-  constructor: (@envelope, @date, @action) ->
+  constructor: (@envelope, @date, @action, @recurrent) ->
 
   key: -> envelope_key @envelope
 
@@ -107,6 +112,10 @@ class ReminderAt
   prettyDate: ->
     moment(@date).calendar()
 
+  listing: ->
+   extra = if @recurrent then " (repeated)" else ""
+   "#{@action} at #{@prettyDate()}#{extra}"
+
 module.exports = (robot) ->
   reminders = new Reminders robot
 
@@ -114,37 +123,48 @@ module.exports = (robot) ->
     text = msg.match[0]
     action = msg.match[2]
 
-    date = parse text
-
-    if date == false
+    res = chrono.parse text
+    if res.length == 0
       msg.send "I did not understand the date in '#{text}'"
       return
 
-    reminder = new ReminderAt msg.envelope, date, action
+    every_idx = text.indexOf('every')
+    repeat = every_idx > -1 and every_idx < res[0].index
+    date = res[0].start.date()
 
     @robot.logger.debug date
+    @robot.logger.debug "repeat: #{repeat}, action: #{action}"
 
+    reminder = new ReminderAt msg.envelope, date, action, repeat
     if reminder.diff() <= 0
       msg.send "#{date} is past. can't remind you"
       return
 
     reminders.queue reminder
+    every = if repeat then ' every' else ''
+    msg.send "I'll remind you#{every} #{action} #{reminder.prettyDate()}"
 
-    msg.send "I'll remind you #{action} #{reminder.prettyDate()}"
-
-  robot.respond /(list|show|all) remind(ers)?/i, (msg) ->
+  robot.respond /(list|show|all)\s+remind(er|ers)?/i, (msg) ->
     msg.send reminders.list(msg)
 
-  robot.respond /remind(ers)?\s+(list|show|all)/i, (msg) ->
+  robot.respond /remind(er|ers)?\s+(list|show|all)/i, (msg) ->
     msg.send reminders.list(msg)
 
-  robot.respond /(list|show|all)\s+remind(ers)?/i, (msg) ->
+  robot.respond /(list|show|all)\s+remind(er|ers)?/i, (msg) ->
     msg.send reminders.list(msg)
 
-  robot.respond /remind(ers)?\s+(delete|remove|stop)\s+(\d+)/i, (msg) ->
+  robot.respond /remind(er|ers)?\s+(delete|remove|stop)\s+(\d+)/i, (msg) ->
     idx = msg.match[3]
     msg.send reminders.delete(msg, idx)
 
-  robot.respond /(delete|remove|stop)\s+remind(ers)?\s+(\d+)/i, (msg) ->
+  robot.respond /(delete|remove|stop)\s+remind(er|ers)?\s+(\d+)/i, (msg) ->
     idx = msg.match[3]
     msg.send reminders.delete(msg, idx)
+
+  robot.respond /remind(er|ers)?\s+(repeat)\s+(\d+)/i, (msg) ->
+    idx = msg.match[3]
+    msg.send reminders.repeat(msg, idx)
+
+  robot.respond /(repeat)\s+remind(er|ers)?\s+(\d+)/i, (msg) ->
+    idx = msg.match[3]
+    msg.send reminders.repeat(msg, idx)
