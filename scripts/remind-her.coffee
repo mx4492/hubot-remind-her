@@ -9,7 +9,7 @@
 #   hubot remind[ers] (list|show|all)
 #   hubot [delete|remove|stop] remind[er] [NUMBER]
 #   hubot remind[er] (delete|remove|stop) [NUMBER]
-#   hubot remind every 30 minutes to take a walk
+#   hubot remind in every 30 minutes to take a walk
 #   hubot remind[er] repeat [NUMBER]
 #   hubot repeat remind[er] [NUMBER]
 #
@@ -127,6 +127,10 @@ class Reminders
     action = msg.match[2]
 
     chrono_result = chrono_parse text
+    if not chrono_result and text.indexOf('every')
+      text = text.replace 'in every', 'every in'
+      chrono_result = chrono_parse text
+
     unless chrono_result
       msg.send "I did not understand the date in '#{text}'"
       return

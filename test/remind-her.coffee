@@ -67,6 +67,9 @@ describe 'Date parsing', ->
   it 'time that has passed today', ->
     assert.match parse('00:1 AM'), /Tomorrow at 12:01 AM/
 
+  it 'special case for repeated relative time', ->
+    assert.equal parse('in every 1 minute'), parse('every in 1 minute')
+
 describe 'Listing reminders', ->
   it 'when no reminders', ->
     room = createRoom()
