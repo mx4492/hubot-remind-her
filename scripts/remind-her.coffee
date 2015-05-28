@@ -72,12 +72,12 @@ class Reminders
   fire: (reminder, id) ->
     unless reminder.is_deleted
       @robot.reply reminder.envelope, "You asked me to remind you #{reminder.action}"
+      @pending[reminder.key()].shift()
+      @remove(id)
       setTimeout =>
         new_reminder = reminder.respawn @robot.logger
         if new_reminder
           @queue new_reminder, id
-        else
-          @remove(id)
       , 1000
 
   remove: (id) ->
