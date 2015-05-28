@@ -1,15 +1,16 @@
 # Hubot Remind Her
 
-Hubot script to create reminders in a relaxed friendly syntax.
+Hubot script to manage reminders in a relaxed friendly syntax.
 
 ## Features
 
-* Supports both relative ("in 5 minutes") and absolute ("tomorrow 5
+* Both relative ("in 5 minutes") and absolute ("tomorrow 5
   pm") time specification.
-* The syntax of the bot command is relaxed. It simply DWYM (Does what
-  you mean) without expecting much grammar.
-* The confirmation given by the script uses a relative date instead of
-  a scary complete ISOish date string.
+* Relaxed syntax. It simply DWYM (Does what you mean) without
+  expecting much grammar.
+* Uses friendly relative date in the confirmation message.
+* Recurrent reminders.
+* Listing and deleteing existing reminders.
 
 ## Installation
 
@@ -33,9 +34,12 @@ If it is prefixed with `remind`, and ends with `to <something>`, and
 has a date in between, it'll work.
 
 ```
-> hubot remind me in 10 minutes to have fun
+> hubot remind me in every 10 minutes to have fun
 > hubot remind me tomorrow 10 PM to eat
 > hubot remind me at 18 Feb to be alive
+> hubot remind me every Tuesday to watch pogo
+> hubot list reminders
+> hubot delete reminder 1
 ```
 
 To get detailed help about the sort of time strings supported, see the
