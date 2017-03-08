@@ -34,7 +34,7 @@ chrono_parse = (text, ref) ->
   result = results[0]
   date = result.start.date()
   if time_until(date) <= 0 && result.tags.ENTimeExpressionParser
-    ref = chrono.parse('tomorrow')[0].start.date()
+    ref = chrono.parse('tomorrow', ref)[0].start.date()
     return chrono_parse text, ref
   # console.log "parsed '#{text}' -> #{date}:"
   # console.log result
