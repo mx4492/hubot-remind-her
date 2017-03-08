@@ -16,7 +16,7 @@ Hubot script to manage reminders in a relaxed friendly syntax.
 
 Install the npm package
 
-    npm install hubot-remind-her --save
+    npm install mx4492/hubot-remind-her --save
 
 and add *hubot-remind-her* to `external-scripts.json`
 
