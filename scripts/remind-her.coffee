@@ -191,7 +191,7 @@ class ReminderAt
 module.exports = (robot) ->
   reminders = new Reminders robot
 
-  robot.respond /remind (.+) ((to|for).*)/i, (msg) ->
+  robot.respond /remind (.+?) ((to|for).*)/i, (msg) ->
     reminders.add msg
 
   robot.respond /(list|show|all)\s+remind(er|ers)?/i, (msg) ->
