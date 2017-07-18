@@ -69,7 +69,7 @@ All thanks to the awesomeness of [chrono][] and [moment.js][].
   triggered ([Reference][long-settimeout]).
 
 [Hubot]: https://hubot.github.com/
-[remind.coffee]: https://github.com/github/hubot-scripts/blob/master/src/scripts/remind.coffee)
+[remind.coffee]: https://github.com/github/hubot-scripts/blob/master/src/scripts/remind.coffee
 [hubot-remind-at]: https://github.com/soh335/hubot-remind-at.git
 [chrono]: http://wanasit.github.io/pages/chrono/
 [long-settimeout]: http://stackoverflow.com/questions/12351521/can-settimeout-be-too-long
