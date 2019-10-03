@@ -1,3 +1,11 @@
+# WARNING ⚠️
+
+**This repository is not being maintained anymore (since 2017).**
+
+Please do not use it unless you understand what you are doing.
+
+---
+
 # Hubot Remind Her
 
 Hubot script to manage reminders in a relaxed friendly syntax.
