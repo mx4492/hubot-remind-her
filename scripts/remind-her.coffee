@@ -146,6 +146,12 @@ class Reminders
     if reminder.diff() <= 0
       msg.send "#{date} is past. can't remind you"
       return
+    if repeat and reminder.diff() < 30 * 1000
+      msg.send "Repeating reminders less than a 30 seconds are not supported to prevent spam."
+      return
+    if reminder.diff() > Math.pow(2, 31) - 1
+      msg.send "Reminders more than 24 days in the future are not supported."
+      return
 
     @queue reminder
     every = if repeat then ' every' else ''
